@@ -1,0 +1,192 @@
+#include <cstdlib>
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
+struct node {
+   //bagian data 
+     char data;
+   //pointer ke node selanjutnya
+    struct node *next; 
+};
+typedef struct node node;
+node *head, *tail;
+
+void AddLast(char item){ // Add Node After Tail
+    struct node *pNew;
+    pNew = (node *)  malloc(sizeof(node));
+    pNew->data = item;
+    if (head == NULL){
+        head= pNew;
+    }
+    else {
+         tail->next = pNew;
+    }
+    tail=pNew;
+}
+
+void AddFirst(char item){ // AddNodeBeforeHead
+    struct node *pNew;
+    pNew = (node *)  malloc(sizeof(node));
+    pNew->data = item;
+    if (head == NULL){
+        tail= pNew;
+    }
+    else {
+         pNew->next = head;
+    }
+    head=pNew;
+}
+
+
+void DeleteFirst(){
+    if (head == NULL){
+        cout << "List is empty" << endl;
+    }
+    else {
+        node *temp = head;
+        head = head->next;
+        delete temp;
+    }
+}
+
+void DeleteLast(){
+    if (head == NULL){
+        cout << "List is empty" << endl;
+    }
+    else if (head == tail){
+        delete head;
+        head = NULL;
+        tail = NULL;
+    }
+    else {
+        node *temp = head;
+        while (temp->next != tail){
+            temp = temp->next;
+        }
+        delete tail;
+        tail = temp;
+        tail->next = NULL;
+    }
+}
+
+void InsertNode(char item, int pos){
+    node *pNew = new node;
+    pNew->data = item;
+
+    if (head == NULL){
+        head = pNew;
+        tail = pNew;
+        pNew->next = NULL;
+    }
+    else if (pos == 0){
+        pNew->next = head;
+        head = pNew;
+    }
+    else {
+        node *temp = head;
+        int count = 1;
+        while (temp->next != NULL && count != pos){
+            temp = temp->next;
+            count++;
+        }
+        pNew->next = temp->next;
+        temp->next = pNew;
+        if (pNew->next == NULL){
+            tail = pNew;
+        }
+    }
+}
+
+bool FindItem(char item){
+    node *temp = head;
+    while (temp != NULL){
+        if (temp->data == item){
+            return true;
+        }
+        temp = temp->next;
+    }
+    return false;
+}
+
+
+char AccsessItem(int pos){
+    if (pos <= 0 || head == NULL){
+        return head->data;
+    }
+    node *curr = head;
+    int i = 0;
+    while(curr != NULL && i < pos){
+        curr = curr->next;
+        i++;
+    }
+    if (curr == NULL){
+        return tail->data;
+    }
+    return curr->data;
+}
+
+void DisplayList(){
+    if (head == NULL){
+        cout << "List is empty" << endl;
+    }
+    else {
+        node *temp = head;
+        while (temp != NULL){
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+}
+
+int main(int argc, char** argv) {
+
+    AddLast('E');
+    AddLast('G');
+    AddLast('I');
+	AddLast('K');
+	
+    AddFirst('D');
+	AddFirst('C');
+	AddFirst('A');
+	
+	cout << "Linked List: ";
+	DisplayList();
+	
+	cout << endl;
+	
+    InsertNode('X', 3);
+    InsertNode('Y', 1);
+	cout << "Linked List Setelah Penyisipan: ";
+    DisplayList(); 
+	
+	cout << endl;
+	
+    DeleteFirst();
+	cout << "Linked List Setelah Penghapusan Node Pertama: ";
+    DisplayList();
+	
+	cout << endl;
+	
+    DeleteLast();
+	cout << "Linked List Setelah Penghapusan Node Terakhir: ";
+    DisplayList();
+    
+    cout << endl;
+    
+	//1 Jika benar dan 0 Jika Salah
+	cout << "Jika ditemukan (1) jika tidak ditemukan (0)" << endl;
+    cout << "Cari Node  A: " << FindItem('A') << endl; // true
+    cout << "Cari Node X: " << FindItem('X') << endl; // true
+	
+	cout << endl;
+	
+	//Mengakses Node
+	cout << "Node Pada Index 2: " << AccsessItem(2) << endl;
+	cout << "Node Pada Index 6: " << AccsessItem(6) << endl;
+
+    getch();    
+    return EXIT_SUCCESS;
+}
