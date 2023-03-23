@@ -1,0 +1,144 @@
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+
+struct Mahasiswa {
+    string NIM;
+    string NAMA;
+    double IPK;
+};
+
+struct node {
+   //bagian data 
+     Mahasiswa data;
+   //pointer ke node selanjutnya
+    struct node *next; 
+    struct node *prev;
+};
+
+typedef struct node node;
+node *head, *tail;
+
+void AddLast(Mahasiswa item){ // Add Node After Tail
+    struct node *pNew;
+    pNew = (node *)  malloc(sizeof(node));
+    pNew->data = item;
+    if (head == NULL){
+        head= pNew;
+    }
+    else {
+         tail->next = pNew;
+         pNew->prev=tail;
+    }
+    tail=pNew;
+}
+
+void AddFirst(Mahasiswa item){ // AddNodeBeforeHead
+    struct node *pNew;
+    pNew = (node *)  malloc(sizeof(node));
+    pNew->data = item;
+    if (head == NULL){
+        tail= pNew;
+    }
+    else {
+         pNew->next = head;
+         head->prev=pNew;
+    }
+    head=pNew;
+}
+
+void SortedAsc (Mahasiswa item) { // Add Node Sorted by IPK
+    struct node *pNew, *pCur, *pPrev;
+    pNew = (node *) malloc(sizeof(node));
+    pNew->data = item;
+    pPrev = NULL;
+    pCur = head;
+    while (pCur != NULL && pCur->data.IPK < item.IPK) {
+        pPrev = pCur;
+        pCur = pCur->next;
+    }
+    if (pPrev == NULL) {
+        AddFirst(item);
+    }
+    else if (pCur == NULL) {
+        AddLast(item);
+    }
+    else {
+        pNew->next = pCur;
+        pNew->prev = pCur->prev;
+        pCur->prev->next = pNew;
+        pCur->prev = pNew;
+    }
+}
+
+void SortedDesc(Mahasiswa item) {
+    struct node *pNew, *pCur, *pPrev;
+    pNew = (node *) malloc(sizeof(node));
+    pNew->data = item;
+    pPrev = NULL;
+    pCur = head;
+    while (pCur != NULL && pCur->data.IPK > item.IPK) { // modifikasi kondisi looping
+        pPrev = pCur;
+        pCur = pCur->next;
+    }
+    if (pPrev == NULL) {
+        AddFirst(item);
+    }
+    else if (pCur == NULL) {
+        AddLast(item);
+    }
+    else {
+        pNew->next = pCur;
+        pPrev->next = pNew;
+        pCur->prev = pNew; 
+        pNew->prev = pPrev; 
+    }
+}
+
+
+void DisplayList(){
+    struct node *temp = head;
+    while (temp != NULL){
+        cout << "NIM : " << temp->data.NIM << endl;
+		cout << "NAMA : " << temp->data.NAMA << endl;
+		cout << "IPK : " << temp->data.IPK << endl;
+		cout << endl;
+        temp = temp->next;
+    }
+	
+	cout << endl;
+}
+
+int main() {
+	
+	head = NULL;
+	tail = NULL;
+	
+	Mahasiswa mhs [7]=  {
+		{"225150007", "Erlinda", 4.00},
+    	{"225150008", "Abdul", 3.72},
+    	{"225150009", "Reyhan", 3.90},
+    	{"225150010", "Dirgantara", 3.97},
+    	{"225150011", "Adawiyah", 3.58},
+    	{"225150012", "Nastiti", 3.66},
+    	{"225150013", "Burhan", 3.62}
+	};
+	
+	for (int i = 0; i < 7; i++){
+		SortedAsc(mhs[i]);
+	}
+   
+    cout << "Urutan IPK Ascending: " << endl << endl;
+    DisplayList();
+    
+    for (int i = 0; i < 7; i++){
+		SortedDesc(mhs[i]);
+	}
+   
+    cout << "Urutan IPK Descending: " << endl << endl;
+    DisplayList();
+
+  
+    return EXIT_SUCCESS;
+}
