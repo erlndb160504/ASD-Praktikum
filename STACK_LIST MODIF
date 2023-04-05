@@ -1,0 +1,141 @@
+#include <iostream>
+#include <string>
+#include <stdlib.h>
+using namespace std;
+
+struct BookLibrary {
+	string bookTitle, bookAuthor, bookPublisher;
+	int bookYear, bookStock;
+};
+
+struct LibraryNode {
+	BookLibrary book;
+	LibraryNode* next;
+};
+LibraryNode* top = NULL;
+
+int count = 0;
+
+void push (BookLibrary book) {
+	LibraryNode* temp = new LibraryNode;
+	temp -> book = book;
+	temp -> next = top;
+	top = temp;
+	
+	cout << "\n BUKU BERHASIL DI TAMBAHKAN " << endl;
+}
+
+void pop() {
+	if (top == NULL) {
+		cout << "STACK EMPTY!" << endl;TOP
+		return;
+	}
+	LibraryNode* temp = top;
+	top = top -> next;
+	delete temp;
+	cout << "\n BUKU TERAKHIR INPUT BERHASIL DI HAPUS" << endl;
+}
+
+bool searchBook (int index) {
+	if (top == NULL) {
+		cout << "STACK EMPTY!" << endl;
+		return false;
+	}
+	LibraryNode* temp = top;
+	int count = 0;
+	while (temp != NULL) {
+		if (count == index) {
+			cout << "\n Buku Pada Index " << index << " ditemukan	= ";
+			cout << "\n Judul		: " << temp -> book.bookTitle;
+			cout << "\n Pengarang	: " << temp -> book.bookAuthor;
+			cout << "\n Penerbit	: " << temp -> book.bookPublisher;
+			cout << "\n Tahun Terbit	: " << temp -> book.bookYear;
+			cout << "\n Stock Buku	:" << temp -> book.bookStock << endl;
+			return true;
+		}
+		temp = temp -> next;
+		count++;
+	}
+	cout << "Buku pada Index " << index << " Tidak ditemukan" << endl;
+	return false;
+}
+
+void display() {
+	if (top == NULL) {
+		cout << "STACK EMPTY!" << endl;
+		return;
+	}
+	LibraryNode* temp = top;
+	int index = 0;
+	while (temp != NULL) {
+		cout << "\nBuku Pada Index " << index << " = ";
+		cout << "\n Judul		: " << temp -> book.bookTitle;
+		cout << "\n Pengarang	: " << temp -> book.bookAuthor;
+		cout << "\n Penerbit	: " << temp -> book.bookPublisher;
+		cout << "\n Tahun Terbit	: " << temp -> book.bookYear;
+		cout << "\n Stock Buku	: " << temp -> book.bookStock << endl;
+		temp = temp -> next;
+		index++;
+	}
+}
+
+int main() {
+	int choice;
+	do {
+		cout << "\nOperasi Pengolahan Buku Perpustakaan : " << endl;
+		cout << "1. Push (Tambah Buku) " << endl;
+        cout << "2. Pop (Hapus) " << endl;
+        cout << "3. Cari Buku pada index tertentu " << endl;
+        cout << "4. Tampilkan seluruh buku" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Masukkan Pilihan = " ;
+        cin >> choice ;
+        
+        switch (choice) {
+        	case 1 : {
+        		BookLibrary book;
+        		cout << "\nJudul		: " ;
+        		cin.ignore();
+				getline (cin, book.bookTitle);
+				cout << "Pengarang	: ";
+				cin.ignore(0);
+				getline (cin, book.bookAuthor);
+				cout << "Penerbit	: ";
+				cin.ignore(0);
+				getline (cin, book.bookPublisher);
+				cout << "Tahun Terbit	: ";
+				cin.ignore(0);
+				cin >> book.bookYear;
+				cout << "Stock Buku	: ";
+				cin.ignore(0);
+				cin >> book.bookStock;
+				push (book);
+			break;
+			}
+			case 2:{
+				pop();
+				break;
+			} 
+			case 3 : {
+				int index;
+				cout << "Input Index Buku yang ingin dicari = " ;
+				cin >> index;
+				searchBook(index);
+				break;
+			}
+			case 4 : {
+				display();
+				break;
+			}
+			case 5 : {
+				cout << "ANDA MENGAKHIRI PROGRAM" << endl;
+				exit(0);
+			}
+			default : {
+				cout << "PILIHAN TIDAK TERSEDIA" << endl;
+			}
+		}
+	} while (true);
+	
+	return 0;
+}
